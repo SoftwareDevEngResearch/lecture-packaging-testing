@@ -48,7 +48,7 @@
                     <h2>(Python) Packaging and Testing</h2>
                     <h3>Software Development for Engineering Research</h3>
                     <br/>
-                    <h3>Kyle Niemeyer. 18 April 2018</h3>
+                    <h3>Kyle Niemeyer. 12 April 2019</h3>
                     <h3>ME 599, Corvallis, OR</h3>
                 </section>
                 <section>
@@ -80,217 +80,6 @@
                             </code></pre>
                         </p>
                     </section>
-                </section>
-
-                <section>
-                    <section>
-                        <h2>(Python) packaging</h1>
-                        <br/>
-                        <p><strong>package:</strong> a collection of modules in the same directory</p>
-                        <br/>
-                        <p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it</p>
-                    </section>
-
-                    <section>
-                        <h3><code>compphys</code> package structure:</h3>
-                        <br/>
-                        <pre><code data-trim>
-                            compphys/
-                            |-- __init__.py
-                            |-- constants.py
-                            |-- physics.py
-                            |-- more/
-                            |   |-- __init__.py
-                            |   |-- morephysics.py
-                            |   |-- evenmorephysics.py
-                            |-- assets/
-                            |   |-- data.txt
-                            |   |-- orphan.py
-                            |-- tests/
-                            |   |-- test_physics.py
-                            |   |-- test_morephysics.py
-                            ...
-                        </code></pre>
-                    </section>
-
-                    <section>
-                        <h4><code>compphys</code> contents:</h4>
-                        <br/>
-                        <ul>
-                            <li class="fragment"><code>__init__.py</code>:
-                                tells Python this is a package; does not need any contents. Executed first before any other modules imported.
-                            </li>
-                            <li class="fragment">Three modules: <code>__init__.py</code>, <code>constants.py</code>, and <code>physics.py</code>
-                            </li>
-                            <li class="fragment"><code>more</code> is a submodule
-                            </li>
-                            <li class="fragment"><code>raw</code> is just a subdirectory;
-                                not a submodule since it doesn't have <code>__init__.py</code> (<code>orphan.py</code> is unreachable!)
-                            </li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h3>Importing submodules</h3>
-                        <br/>
-                        <p>Use attribute access operator: <code>.</code></p>
-
-                        <pre><code data-trim class="fragment python">
-                            import compphys.constants
-                            import compphys.more.morephysics
-
-                            two_pi = 2 * compphys.constants.pi
-                        </code></pre>
-
-                        <p class="fragment">These are <strong>absolute imports</strong></p>
-                    </section>
-
-                    <section>
-                        <h3>Explicit relative imports</h3>
-                        <br/>
-                        <p class="fragment">From <code>physics.py</code>:
-
-                        <pre><code data-trim class="python fragment">
-                            from . import constants
-                            from .constants import pi, h
-                            from .more import morephysics
-                        </code></pre>
-                        </p>
-
-                        <p class="fragment">From <code>evenmorephysics.py</code>:
-
-                        <pre><code data-trim class="python fragment">
-                            from . import morephysics
-                            from .. import constants
-                            from ..constants import pi, h
-                        </code></pre>
-                        </p>
-                    </section>
-
-                    <section>
-                        <h3>Important: while easy to create new functions and modules, don't reinvent the wheel!</h3>
-                        <br/>
-                        <p class="fragment">Rely on the Python standard library, NumPy, SciPy, etc. as much as you need.</p>
-                    </section>
-
-                    <section>
-                        <h4>Useful modules in Python standard library:</h4>
-                        <br/>
-                        <small>
-                        <table style="width:100%">
-                          <tr>
-                            <td><code>os</code></td>
-                            <td>Operating system abstractions: file path operations, file removal</td>
-                          </tr>
-                          <tr>
-                              <td><code>sys</code></td>
-                              <td>System-specific; gets into Python interpreter</td>
-                          </tr>
-                          <tr>
-                              <td><code>math</code></td>
-                              <td>Common mathematical functions and constants</td>
-                          </tr>
-                          <tr>
-                              <td><code>re</code></td>
-                              <td>Regular expressions library</td>
-                          </tr>
-                          <tr>
-                              <td><code>subprocess</code></td>
-                              <td>Spawns child processes and shells; good for running other command-line tools</td>
-                          </tr>
-                          <tr>
-                              <td><code>argparse</code></td>
-                              <td>Creates easy and beautiful command-line utilities</td>
-                          </tr>
-                          <tr>
-                              <td><code>collections</code></td>
-                              <td>Advanced collection types and tools</td>
-                          </tr>
-                          <tr>
-                              <td><code>random</code></td>
-                              <td>Pseudo-random number generators</td>
-                          </tr>
-                          <tr>
-                              <td><code>csv</code></td>
-                              <td>Tools for reading/writing comma-separated value files</td>
-                          </tr>
-                        </table>
-                        </small>
-                    </section>
-
-                    <section>
-                        <h4>Useful third-party packages for computing:</h4>
-                        <br/>
-                        <small>
-                        <table style="width:100%">
-                          <tr>
-                            <td><a href="http://www.numpy.org"><code>numpy</code></a></td>
-                            <td>Essential library for creating and manipulating numerical data</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://docs.scipy.org/doc/scipy/reference/"><code>scipy</code></a></td>
-                              <td>High-level scientific computing library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://matplotlib.org"><code>matplotlib</code></a></td>
-                              <td>Plotting with Python</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://www.sympy.org/"><code>sympy</code></a></td>
-                              <td>Symbolic mathametics computation library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://pandas.pydata.org"><code>pandas</code></a></td>
-                              <td>Python data structures and analysis library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://pint.readthedocs.io/en/latest/"><code>pint</code></a></td>
-                              <td>Package for parsing, defining, and working with units</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://ipython.org"><code>ipython</code></a></td>
-                              <td>Interactive computing shell for Python</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://wxpython.org"><code>wxPython</code></a></td>
-                              <td>cross-platform GUI toolkit for Python </td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://scikit-learn.org/stable/"><code>scikit-learn</code></a></td>
-                              <td>Python-based machine learning library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://numba.pydata.org"><code>numba</code></a></td>
-                              <td>Write high-performance functions in Python</td>
-                          </tr>
-                        </table>
-                        </small>
-                    </section>
-                </section>
-
-                <section>
-                    <h3>In class work</h3>
-                    <br/>
-
-                    <ol style="font-size:30px">
-                        <li class="fragment">Come up with a name for your project's package (if you haven't already)
-                        </li>
-                        <li class="fragment">Create a repository in the
-                            <a href="https://github.com/SoftwareDevEngResearch">SoftwareDevEngResearch</a> organization.
-                            Initialize with a <code>README</code>, <code>LICENSE</code>, and <code>.gitignore</code>
-                        </li>
-                        <li class="fragment">Fork this repo to your account, and clone to your computer.
-                        </li>
-                        <li class="fragment">Add the basic elements of your package: create a directory with the name,
-                            and inside that create <code>__init__.py</code>.
-                        </li>
-                        <li class="fragment">What modules do you anticipate needing/creating? Let's spend a few minutes
-                            brainstorming how to structure your program.
-                        </li>
-                        <li class="fragment">Commit and push your work, then submit a pull request to the upstream fork.
-                        </li>
-                    </ol>
-
                 </section>
 
                 <section>
@@ -605,6 +394,217 @@
                         </code></pre>
                         </div>
                     </section>
+                </section>
+
+								<section>
+                    <section>
+                        <h2>(Python) packaging</h1>
+                        <br/>
+                        <p><strong>package:</strong> a collection of modules in the same directory</p>
+                        <br/>
+                        <p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it</p>
+                    </section>
+
+                    <section>
+                        <h3><code>compphys</code> package structure:</h3>
+                        <br/>
+                        <pre><code data-trim>
+                            compphys/
+                            |-- __init__.py
+                            |-- constants.py
+                            |-- physics.py
+                            |-- more/
+                            |   |-- __init__.py
+                            |   |-- morephysics.py
+                            |   |-- evenmorephysics.py
+                            |-- assets/
+                            |   |-- data.txt
+                            |   |-- orphan.py
+                            |-- tests/
+                            |   |-- test_physics.py
+                            |   |-- test_morephysics.py
+                            ...
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h4><code>compphys</code> contents:</h4>
+                        <br/>
+                        <ul>
+                            <li class="fragment"><code>__init__.py</code>:
+                                tells Python this is a package; does not need any contents. Executed first before any other modules imported.
+                            </li>
+                            <li class="fragment">Three modules: <code>__init__.py</code>, <code>constants.py</code>, and <code>physics.py</code>
+                            </li>
+                            <li class="fragment"><code>more</code> is a submodule
+                            </li>
+                            <li class="fragment"><code>raw</code> is just a subdirectory;
+                                not a submodule since it doesn't have <code>__init__.py</code> (<code>orphan.py</code> is unreachable!)
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Importing submodules</h3>
+                        <br/>
+                        <p>Use attribute access operator: <code>.</code></p>
+
+                        <pre><code data-trim class="fragment python">
+                            import compphys.constants
+                            import compphys.more.morephysics
+
+                            two_pi = 2 * compphys.constants.pi
+                        </code></pre>
+
+                        <p class="fragment">These are <strong>absolute imports</strong></p>
+                    </section>
+
+                    <section>
+                        <h3>Explicit relative imports</h3>
+                        <br/>
+                        <p class="fragment">From <code>physics.py</code>:
+
+                        <pre><code data-trim class="python fragment">
+                            from . import constants
+                            from .constants import pi, h
+                            from .more import morephysics
+                        </code></pre>
+                        </p>
+
+                        <p class="fragment">From <code>evenmorephysics.py</code>:
+
+                        <pre><code data-trim class="python fragment">
+                            from . import morephysics
+                            from .. import constants
+                            from ..constants import pi, h
+                        </code></pre>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>Important: while easy to create new functions and modules, don't reinvent the wheel!</h3>
+                        <br/>
+                        <p class="fragment">Rely on the Python standard library, NumPy, SciPy, etc. as much as you need.</p>
+                    </section>
+
+                    <section>
+                        <h4>Useful modules in Python standard library:</h4>
+                        <br/>
+                        <small>
+                        <table style="width:100%">
+                          <tr>
+                            <td><code>os</code></td>
+                            <td>Operating system abstractions: file path operations, file removal</td>
+                          </tr>
+                          <tr>
+                              <td><code>sys</code></td>
+                              <td>System-specific; gets into Python interpreter</td>
+                          </tr>
+                          <tr>
+                              <td><code>math</code></td>
+                              <td>Common mathematical functions and constants</td>
+                          </tr>
+                          <tr>
+                              <td><code>re</code></td>
+                              <td>Regular expressions library</td>
+                          </tr>
+                          <tr>
+                              <td><code>subprocess</code></td>
+                              <td>Spawns child processes and shells; good for running other command-line tools</td>
+                          </tr>
+                          <tr>
+                              <td><code>argparse</code></td>
+                              <td>Creates easy and beautiful command-line utilities</td>
+                          </tr>
+                          <tr>
+                              <td><code>collections</code></td>
+                              <td>Advanced collection types and tools</td>
+                          </tr>
+                          <tr>
+                              <td><code>random</code></td>
+                              <td>Pseudo-random number generators</td>
+                          </tr>
+                          <tr>
+                              <td><code>csv</code></td>
+                              <td>Tools for reading/writing comma-separated value files</td>
+                          </tr>
+                        </table>
+                        </small>
+                    </section>
+
+                    <section>
+                        <h4>Useful third-party packages for computing:</h4>
+                        <br/>
+                        <small>
+                        <table style="width:100%">
+                          <tr>
+                            <td><a href="http://www.numpy.org"><code>numpy</code></a></td>
+                            <td>Essential library for creating and manipulating numerical data</td>
+                          </tr>
+                          <tr>
+                              <td><a href="https://docs.scipy.org/doc/scipy/reference/"><code>scipy</code></a></td>
+                              <td>High-level scientific computing library</td>
+                          </tr>
+                          <tr>
+                              <td><a href="https://matplotlib.org"><code>matplotlib</code></a></td>
+                              <td>Plotting with Python</td>
+                          </tr>
+                          <tr>
+                              <td><a href="http://www.sympy.org/"><code>sympy</code></a></td>
+                              <td>Symbolic mathametics computation library</td>
+                          </tr>
+                          <tr>
+                              <td><a href="https://pandas.pydata.org"><code>pandas</code></a></td>
+                              <td>Python data structures and analysis library</td>
+                          </tr>
+                          <tr>
+                              <td><a href="https://pint.readthedocs.io/en/latest/"><code>pint</code></a></td>
+                              <td>Package for parsing, defining, and working with units</td>
+                          </tr>
+                          <tr>
+                              <td><a href="http://ipython.org"><code>ipython</code></a></td>
+                              <td>Interactive computing shell for Python</td>
+                          </tr>
+                          <tr>
+                              <td><a href="https://wxpython.org"><code>wxPython</code></a></td>
+                              <td>cross-platform GUI toolkit for Python </td>
+                          </tr>
+                          <tr>
+                              <td><a href="http://scikit-learn.org/stable/"><code>scikit-learn</code></a></td>
+                              <td>Python-based machine learning library</td>
+                          </tr>
+                          <tr>
+                              <td><a href="http://numba.pydata.org"><code>numba</code></a></td>
+                              <td>Write high-performance functions in Python</td>
+                          </tr>
+                        </table>
+                        </small>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>In class work</h3>
+                    <br/>
+
+                    <ol style="font-size:30px">
+                        <li class="fragment">Come up with a name for your project's package (if you haven't already)
+                        </li>
+                        <li class="fragment">Create a repository in the
+                            <a href="https://github.com/SoftwareDevEngResearch">SoftwareDevEngResearch</a> organization.
+                            Initialize with a <code>README</code>, <code>LICENSE</code>, and <code>.gitignore</code>
+                        </li>
+                        <li class="fragment">Fork this repo to your account, and clone to your computer.
+                        </li>
+                        <li class="fragment">Add the basic elements of your package: create a directory with the name,
+                            and inside that create <code>__init__.py</code>.
+                        </li>
+                        <li class="fragment">What modules do you anticipate needing/creating? Let's spend a few minutes
+                            brainstorming how to structure your program.
+                        </li>
+                        <li class="fragment">Commit and push your work, then submit a pull request to the upstream fork.
+                        </li>
+                    </ol>
+
                 </section>
 
                 <section>
