@@ -45,16 +45,16 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
                 <section>
-                    <h2>(Python) Packaging and Testing</h2>
+                    <h2>Software Testing and Continuous Integration</h2>
                     <h3>Software Development for Engineering Research</h3>
                     <br/>
-                    <h3>Kyle Niemeyer. 12 April 2019</h3>
+                    <h3>Kyle Niemeyer. 7 April 2020</h3>
                     <h3>ME 599, Corvallis, OR</h3>
                 </section>
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-                            ## Today: **packaging** and **testing** of (Python) programs
+                            ## Today: **testing** and **continuous integration** of (Python) programs
                         </textarea>
                     </section>
 
@@ -120,13 +120,34 @@
                     </section>
 
                     <section>
+						<p class="fragment">
+							Testing is particularly important if you want contributions to your codebase.
+						</p>
+						<ul>
+							<li class="fragment">
+								As a contributor, how do I know if my PR hasn’t broken anything?
+							</li>
+							<li class="fragment">
+								As a commiter, how do I know if your PR is ok?
+							</li>
+							<li class="fragment">
+								Unit tests are often a great repository of how different features of a library actually work
+							</li>
+						</ul>
+					</section>
+
+                </section>
+                
+                <section>
+
+                    <section>
                         <h3>What and how to test?</h3>
                         <br/>
 
                         <pre><code data-trim class="python fragment">
                             def kepler_loc(p1, p2, dt, t):
                                 '''Use Kepler's Laws to predict location of celestial body'''
-                                ... 
+                                ...
                                 return p3
                         </code></pre>
 
@@ -204,7 +225,9 @@
 
                         <p class="fragment"><code>pytest</code> finds all testing modules and functions, and runs them.</p>
                     </section>
-
+                </section>
+                
+                <section>
                     <section>
                         <h3>Kinds of tests</h3><br/>
 
@@ -261,19 +284,6 @@
                     </section>
 
                     <section>
-                        <h3>Types of tests</h3><br/>
-
-                        <ul>
-                            <li class="fragment"><strong>unit test</strong>: interrogate individual functions and methods
-                            </li>
-                            <li class="fragment"><strong>integration test</strong>: verify that multiple pieces of the code work together
-                            </li>
-                            <li class="fragment"><strong>regression test</strong>: confirm that results match prior code results (which are assumed correct)
-                            </li>
-                        </ul>
-                    </section>
-
-                    <section>
                         <h3>Test generators</h3><br/>
 
                         <pre><code data-trim class="python">
@@ -296,11 +306,35 @@
                                 obs = add2(x, y)
                                 assert np.allclose(exp, obs)
                         </code></pre>
-
-                        <pre><code data-trim class="bash fragment">
-                            $ pytest
-                        </code></pre>
                     </section>
+
+                    <section>
+                        <h3>Types of tests</h3><br/>
+
+                        <ul>
+                            <li class="fragment"><strong>unit test</strong>: interrogate individual functions and methods
+                            </li>
+                            <li class="fragment"><strong>integration test</strong>: verify that multiple pieces of the code work together
+                            </li>
+                            <li class="fragment"><strong>regression test</strong>: confirm that results match prior code results (which are assumed correct)
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+						<p>Developers warn against having unit tests without any integration tests</p>
+						<img width="40%" data-src="./images/unit-tests-dryer.gif">
+						<img width="40%" data-src="./images/unit-tests-doors.gif">
+						
+						<small>
+							Sources: <a href="https://twitter.com/thepracticaldev/status/845638950517706752">twitter/@ThePracticalDev</a>,
+							<a href="https://twitter.com/withzombies/status/829716565834752000">twitter/@withzombies</a>
+						</small>
+					</section>
+
+                </section>
+                
+                <section>
 
                     <section>
                         <h3>Test-Driven Development (TDD)</h3><br/>
@@ -399,194 +433,261 @@
                     </section>
                 </section>
 
-								<section>
+                <section>
+					<section>
+						<h2>Test coverage</h2>
+						<br/>
+						<p class="fragment">Meaning: percentage of code for which a test exists,
+							determined by number of line executed during tests
+						</p>
+					</section>
+
+					<section>
+						<h2><a href="https://pytest-cov.readthedocs.io"><code>pytest-cov</code></a></h2>
+						<br/>
+						<p class="fragment">Instructions:</p>
+						<ol>
+							<li class="fragment">
+								Install <code>pytest-cov</code> using <code>pip</code>/<code>conda</code>
+							</li>
+							<li class="fragment">
+								<code>pytest -vv --cov=./</code>
+							</li>
+							<li class="fragment">
+								Look at coverage; are you at or near 100%?
+							</li>
+							<li class="fragment">
+								Get more detailed information by having it create a report:
+								<code>pytest -vv --cov=./ --cov-report html</code>
+							</li>
+						</ol>
+					</section>
+
+					<section>
+						<h2>Example</h2>
+						<br/>
+						<pre><code data-trim class="fragment python">
+                            # content of test_sample.py
+                            def inc(x):
+                                if x < 0:
+                                    return x - 1
+                                return x + 1
+
+                            def test_answer():
+                                assert inc(3) == 4
+						</code></pre>
+
+						<pre><code data-trim class="fragment bash">
+                            $ pytest -vv test_sample.py --cov=./
+
+                            main.py::test_answer PASSED
+
+                            ---------- coverage: platform darwin, python 3.5.4-final-0 -----------
+                            Name      Stmts   Miss  Cover
+                            -----------------------------
+                            main.py       6      1    83%
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Coverage report</h2>
+						<br/>
+						<img src="./images/coverage-report.png" height="400" alt="Example HTML coverage report from pytest-cov">
+					</section>
+
+					<section>
+						<pre><code data-trim class="fragment python">
+                            # content of test_sample.py
+                            def inc(x):
+                                if x < 0:
+                                    return x - 1
+                                return x + 1
+
+                            def test_answer():
+                                assert inc(3) == 4
+
+                            def test_answer_negative():
+                                assert inc(-2) == -3
+						</code></pre>
+
+						<pre><code data-trim class="fragment bash">
+                            $ pytest -vv test_sample.py --cov=./
+
+                            main.py::test_answer PASSED
+                            main.py::test_answer_negative PASSED
+
+                            ---------- coverage: platform darwin, python 3.5.4-final-0 -----------
+                            Name      Stmts   Miss  Cover
+                            -----------------------------
+                            main.py       8      0   100%
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Coverage overview: work towards 100%</h3>
+						<br/>
+						<h3 class="fragment">Use coverage to help you identify missing edge/corner cases</h3>
+					</section>
+				</section>
+
+
+                <section>
                     <section>
-                        <h2>(Python) packaging</h1>
+                        <h2>Next: continuous integration</h2>
                         <br/>
-                        <p><strong>package:</strong> a collection of modules in the same directory</p>
+                        <p class="fragment">Meaning: ensure all changes to your project pass tests through automated
+                            test & build process
+                        </p>
+					</section>
+					
+					<section>
+						<h2>Importance of testing + continuous integration</h2>
+
+						<img class="plain" width="60%" src="./images/chemical-shifts-paper.png"/>
+
+						<small>
+							<a href="https://doi.org/10.1021/acs.orglett.9b03216"><code>https://doi.org/10.1021/acs.orglett.9b03216</code></a>
+						</small>
+					</section>
+
+					<section>
+						<p class="fragment">
+							Recent paper found differences in calculated nuclear magnetic resonance chemical shifts on different operating systems
+						</p>
+						<p class="fragment">
+							Using Python scripts published in Nature Protocols in 2014, cited over 130 times
+						</p>
+						<p class="fragment">
+							Error due to differences in file sorting across platforms… 
+						</p>
+					</section>
+
+                    <section>
+                        <h3>Getting started with <a href="https://travis-ci.org">Travis CI</a>:</h3>
                         <br/>
-                        <p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it</p>
+                        <ol>
+                            <li class="fragment">
+                                Sign in at <a href="https://travis-ci.org">travis-ci.org</a> with your GitHub account
+                            </li>
+                            <li class="fragment">
+                                Go to your profile and enable the repository for the software you want to build & test.
+                            </li>
+                            <li class="fragment">
+                                Add a <code>.travis.yml</code> file to the repository
+                            </li>
+                            <li class="fragment">
+                                Add info to configuration file telling Travis CI what to do:
+                                what programming language (<code>language: python</code>), what it needs to build your
+                                package (<code>install</code>), and how to run the tests (<code>language: script</code>)
+                            </li>
+                        </ol>
                     </section>
 
                     <section>
-                        <h3><code>compphys</code> package structure:</h3>
+                        <h3>Using pip</h3>
                         <br/>
+                        <pre><code data-trim class="python">
+                            language: python
+                            python:
+                            - "3.5"
+                            - "3.6"
+
+                            install:
+                                - pip install -r requirements.txt
+                            script:
+                                - pytest -vv --cov=./;
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h4>Contents of <code>requirements.txt</code></h4>
                         <pre><code data-trim>
-                            compphys/
-                            |-- __init__.py
-                            |-- constants.py
-                            |-- physics.py
-                            |-- more/
-                            |   |-- __init__.py
-                            |   |-- morephysics.py
-                            |   |-- evenmorephysics.py
-                            |-- assets/
-                            |   |-- data.txt
-                            |   |-- orphan.py
-                            |-- tests/
-                            |   |-- test_physics.py
-                            |   |-- test_morephysics.py
-                            ...
+                            #
+                            ####### requirements.txt #######
+                            #
+                            ###### Requirements without Version Specifiers ######
+                            pytest
+                            pytest-cov
+                            #
+                            ###### Requirements with Version Specifiers ######
+                            #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
+                            numpy >= 1.12.0
+                            pint >= 0.7.2
+                            #
                         </code></pre>
                     </section>
 
                     <section>
-                        <h4><code>compphys</code> contents:</h4>
+                        <h3>Using conda</h3>
                         <br/>
-                        <ul>
-                            <li class="fragment"><code>__init__.py</code>:
-                                tells Python this is a package; does not need any contents. Executed first before any other modules imported.
-                            </li>
-                            <li class="fragment">Three modules: <code>__init__.py</code>, <code>constants.py</code>, and <code>physics.py</code>
-                            </li>
-                            <li class="fragment"><code>more</code> is a submodule
-                            </li>
-                            <li class="fragment"><code>raw</code> is just a subdirectory;
-                                not a submodule since it doesn't have <code>__init__.py</code> (<code>orphan.py</code> is unreachable!)
-                            </li>
-                        </ul>
-                    </section>
+                        <div style="font-size:30px">
+                        <pre class="stretch"><code data-trim class="bash">
+                            language: python
+                            python:
+                            - "3.5"
+                            - "3.6"
 
-                    <section>
-                        <h3>Importing submodules</h3>
-                        <br/>
-                        <p>Use attribute access operator: <code>.</code></p>
-
-                        <pre><code data-trim class="fragment python">
-                            import compphys.constants
-                            import compphys.more.morephysics
-
-                            two_pi = 2 * compphys.constants.pi
+                            install:
+                                - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+                                    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+                                    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+                                    wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+                                    fi
+                                - bash miniconda.sh -b -p $HOME/miniconda
+                                - rm miniconda.sh
+                                - source $HOME/miniconda/etc/profile.d/conda.sh && conda activate
+                                - conda config --set always_yes yes --set changeps1 no
+                                - conda update -q conda
+                                - conda update -q --all
+                                - conda config --append channels conda-forge
+                                - conda env create -qf test-environment.yaml;
+                                - source activate test-environment;
+                            script:
+                                - pytest -vv --cov=./;
                         </code></pre>
-
-                        <p class="fragment">These are <strong>absolute imports</strong></p>
+                        </div>
                     </section>
 
                     <section>
-                        <h3>Explicit relative imports</h3>
-                        <br/>
-                        <p class="fragment">From <code>physics.py</code>:
-
-                        <pre><code data-trim class="python fragment">
-                            from . import constants
-                            from .constants import pi, h
-                            from .more import morephysics
+                        <h4>Contents of <code>test-environment.yaml</code></h4>
+                        <pre><code data-trim class="yaml">
+                            name: test-environment
+                            channels:
+                            - defaults
+                            - conda-forge
+                            dependencies:
+                                - python=3.5
+                                - numpy>=1.12.0
+                                - pytest>=3.2.0
+                                - pytest-cov
+                                - pint>=0.7.2
                         </code></pre>
-                        </p>
-
-                        <p class="fragment">From <code>evenmorephysics.py</code>:
-
-                        <pre><code data-trim class="python fragment">
-                            from . import morephysics
-                            from .. import constants
-                            from ..constants import pi, h
-                        </code></pre>
-                        </p>
                     </section>
 
                     <section>
-                        <h3>Important: while easy to create new functions and modules, don't reinvent the wheel!</h3>
+                        <h3>Getting started with <a href="https://travis-ci.org">Travis CI</a> (contd.)</h3>
                         <br/>
-                        <p class="fragment">Rely on the Python standard library, NumPy, SciPy, etc. as much as you need.</p>
+                        <ol start="5">
+                            <li class="fragment">
+                                <code>git add .travis.yml test-environment.yaml</code>, commit, and push to GitHub
+                            </li>
+                            <li class="fragment">
+                                Check the <a href="https://travis-ci.org/auth">build status page</a> to see if the build passes or fails
+                            </li>
+                            <li class="fragment">
+                                (Optional) Add a status badge to your README:
+                                <a href="https://travis-ci.org/travis-ci/travis-web"><img src="https://travis-ci.org/travis-ci/travis-web.svg?branch=master" alt="Build Status"></a>
+                                (Get this from your Repository page on Travis CI)
+                            </li>
+                        </ol>
+                        <br/>
+                        <p class="fragment">GitHub will use Travis CI to tell you if Pull Requests are safe to merge!</p>
                     </section>
 
-                    <section>
-                        <h4>Useful modules in Python standard library:</h4>
-                        <br/>
-                        <small>
-                        <table style="width:100%">
-                          <tr>
-                            <td><code>os</code></td>
-                            <td>Operating system abstractions: file path operations, file removal</td>
-                          </tr>
-                          <tr>
-                              <td><code>sys</code></td>
-                              <td>System-specific; gets into Python interpreter</td>
-                          </tr>
-                          <tr>
-                              <td><code>math</code></td>
-                              <td>Common mathematical functions and constants</td>
-                          </tr>
-                          <tr>
-                              <td><code>re</code></td>
-                              <td>Regular expressions library</td>
-                          </tr>
-                          <tr>
-                              <td><code>subprocess</code></td>
-                              <td>Spawns child processes and shells; good for running other command-line tools</td>
-                          </tr>
-                          <tr>
-                              <td><code>argparse</code></td>
-                              <td>Creates easy and beautiful command-line utilities</td>
-                          </tr>
-                          <tr>
-                              <td><code>collections</code></td>
-                              <td>Advanced collection types and tools</td>
-                          </tr>
-                          <tr>
-                              <td><code>random</code></td>
-                              <td>Pseudo-random number generators</td>
-                          </tr>
-                          <tr>
-                              <td><code>csv</code></td>
-                              <td>Tools for reading/writing comma-separated value files</td>
-                          </tr>
-                        </table>
-                        </small>
-                    </section>
-
-                    <section>
-                        <h4>Useful third-party packages for computing:</h4>
-                        <br/>
-                        <small>
-                        <table style="width:100%">
-                          <tr>
-                            <td><a href="http://www.numpy.org"><code>numpy</code></a></td>
-                            <td>Essential library for creating and manipulating numerical data</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://docs.scipy.org/doc/scipy/reference/"><code>scipy</code></a></td>
-                              <td>High-level scientific computing library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://matplotlib.org"><code>matplotlib</code></a></td>
-                              <td>Plotting with Python</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://www.sympy.org/"><code>sympy</code></a></td>
-                              <td>Symbolic mathametics computation library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://pandas.pydata.org"><code>pandas</code></a></td>
-                              <td>Python data structures and analysis library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://pint.readthedocs.io/en/latest/"><code>pint</code></a></td>
-                              <td>Package for parsing, defining, and working with units</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://ipython.org"><code>ipython</code></a></td>
-                              <td>Interactive computing shell for Python</td>
-                          </tr>
-                          <tr>
-                              <td><a href="https://wxpython.org"><code>wxPython</code></a></td>
-                              <td>cross-platform GUI toolkit for Python </td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://scikit-learn.org/stable/"><code>scikit-learn</code></a></td>
-                              <td>Python-based machine learning library</td>
-                          </tr>
-                          <tr>
-                              <td><a href="http://numba.pydata.org"><code>numba</code></a></td>
-                              <td>Write high-performance functions in Python</td>
-                          </tr>
-                        </table>
-                        </small>
-                    </section>
                 </section>
 
                 <section>
-                    <h3>In class work</h3>
+                    <h3>Initial project work</h3>
                     <br/>
 
                     <ol style="font-size:30px">
